@@ -13,7 +13,7 @@ from stardict import StarDict
 
 #==============================================================================
 
-def similar(word, n, cutoff):
+def similar(word, n, cutoff, frq):
     dic  = words.words()
     sim  = difflib.get_close_matches(word, dic, n = n, cutoff = cutoff)    
     # func = lambda x,y:x if y in x else x + [y]
@@ -25,7 +25,7 @@ def similar(word, n, cutoff):
     translations = list(filter(None,dictionary))
     
     for translation in translations:
-        if translation['frq'] > 0:
+        if translation['frq'] > frq:
             impactfactor = isnone(translation['oxford'])*1000000\
             +isnone(translation['collins'])*100000\
             +translation['frq']
@@ -92,9 +92,11 @@ def meaning(sim):
     return '有空做个APP'
     
 #==============================================================================
+
 if __name__ == '__main__':
-    word    = 'farmer'  
+    word    = input('input:')  
     n       = 100          #upper limit number of similar words
-    cutoff  = 0.8         #larger value means less words
-    sim     = similar(word, n, cutoff)
+    cutoff  = 0.75         #larger value means less words
+    frq     = 0
+    sim     = similar(word, n, cutoff, frq)
     app     = meaning(sim)
